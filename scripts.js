@@ -65,7 +65,7 @@ const checkHasSpecialLetter = (password) => {
 //===================
 //=== Validators ====
 //===================
-const validatePassword = (emailAddress) => {
+const validateGmail = (emailAddress) => {
   return checkGmail(emailAddress);
 };
 

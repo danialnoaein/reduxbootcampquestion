@@ -16,9 +16,21 @@ form.addEventListener("submit", (event) => {
 //=== Handle Form Elements KEYUP Event ====
 //=========================================
 emailInput.addEventListener("keyup", () => {
-  console.log(emailInput.value);
+  emailInput.style.borderColor = checkGmail(emailInput.value) ? "green" : "red";
 });
 
 passwordInput.addEventListener("keyup", () => {
   console.log(passwordInput.value);
 });
+
+//===================================
+//=== Check functions with regex ====
+//===================================
+const checkGmail = (emailAddress) => {
+  let pattern = /^[a-z0-9](\.?[a-z0-9]){5,}@gmail\.com$/;
+  if (emailAddress.match(pattern)) {
+    return true;
+  } else {
+    return false;
+  }
+};

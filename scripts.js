@@ -83,7 +83,7 @@ const validatePassword = (password) => {
 //=== Handle Form Elements KEYUP Event ====
 //=========================================
 emailInput.addEventListener("keyup", () => {
-  emailInput.style.borderColor = validatePassword(emailInput.value)
+  emailInput.style.borderColor = validateGmail(emailInput.value)
     ? "green"
     : "red";
 });

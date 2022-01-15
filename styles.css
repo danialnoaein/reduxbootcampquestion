@@ -4,3 +4,10 @@ input {
   display: block;
   margin: 8px;
 }
+.error_block {
+  border: 1px solid red;
+  border-radius: 4px;
+  background-color: gray;
+  padding: 4px;
+  margin: 4px;
+}

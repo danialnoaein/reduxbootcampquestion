@@ -62,6 +62,54 @@ const checkHasSpecialLetter = (password) => {
   }
 };
 
+//=============================
+//=== Error Hint Generator ====
+//=============================
+const EMAIL_ERROR = "EMAIL_ERROR";
+const PASSWORD_ERROR = "PASSWORD_ERROR";
+
+const errorBuilder = (type, message) => {
+  let errorBlock = document.createElement("div");
+  errorBlock.innerHTML = message;
+  errorBlock.classList.add(`error_block`);
+
+  switch (type) {
+    case EMAIL_ERROR:
+      emailInput.after(errorBlock);
+      break;
+    case PASSWORD_ERROR:
+      passwordInput.after(errorBlock);
+      break;
+    default:
+      break;
+  }
+};
+
+const showErrors = (signinInfo) => {
+  !checkGmail(signinInfo.gmail) && errorBuilder(EMAIL_ERROR, "checkGmail");
+
+  !checkLength(signinInfo.password) &&
+    errorBuilder(PASSWORD_ERROR, "checkLength");
+
+  !checkHasDigit(signinInfo.password) &&
+    errorBuilder(PASSWORD_ERROR, "checkHasDigit");
+
+  !checkHasUpperCaseLetter(signinInfo.password) &&
+    errorBuilder(PASSWORD_ERROR, "checkHasUpperCaseLetter");
+
+  !checkHasLowerCaseLetter(signinInfo.password) &&
+    errorBuilder(PASSWORD_ERROR, "checkHasLowerCaseLetter");
+
+  !checkHasSpecialLetter(signinInfo.password) &&
+    errorBuilder(PASSWORD_ERROR, "checkHasSpecialLetter");
+};
+
+const clearErrorHints = () => {
+  [...document.getElementsByClassName("error_block")].map(
+    (n) => n && n.remove()
+  );
+};
+
 //===================
 //=== Validators ====
 //===================
@@ -99,4 +147,20 @@ passwordInput.addEventListener("keyup", () => {
 //===========================
 form.addEventListener("submit", (event) => {
   event.preventDefault();
+
+  clearErrorHints();
+
+  let signinInfo = {
+    gmail: emailInput.value,
+    password: passwordInput.value,
+  };
+
+  if (
+    validateGmail(signinInfo.gmail) &&
+    validatePassword(signinInfo.password)
+  ) {
+    console.log(signinInfo); //Final Step => Values are valid
+  } else {
+    showErrors(signinInfo);
+  }
 });

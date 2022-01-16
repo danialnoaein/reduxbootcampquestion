@@ -65,8 +65,8 @@ const checkHasSpecialLetter = (password) => {
 //=============================
 //=== Error Hint Generator ====
 //=============================
-const EMAIL_ERROR = "EMAIL_ERROR";
-const PASSWORD_ERROR = "PASSWORD_ERROR";
+const GMAIL_TYPE_ERROR = 0;
+const PASSWORD_TYPE_ERROR = 1;
 
 const errorBuilder = (type, message) => {
   let errorBlock = document.createElement("div");
@@ -74,10 +74,10 @@ const errorBuilder = (type, message) => {
   errorBlock.classList.add(`error_block`);
 
   switch (type) {
-    case EMAIL_ERROR:
+    case GMAIL_TYPE_ERROR:
       emailInput.after(errorBlock);
       break;
-    case PASSWORD_ERROR:
+    case PASSWORD_TYPE_ERROR:
       passwordInput.after(errorBlock);
       break;
     default:
@@ -85,23 +85,44 @@ const errorBuilder = (type, message) => {
   }
 };
 
-const showErrors = (signinInfo) => {
-  !checkGmail(signinInfo.gmail) && errorBuilder(EMAIL_ERROR, "checkGmail");
+const CHECK_GMAIL_ERROR_MESSAGE = "Enter GMail correctly";
+const CHECK_PASSWORD_LENGTH_ERROR_MESSAGE =
+  "Password's length must grater than 6 character";
+const CHECK_PASSWORD_HAS_DIGITS_ERROR_MESSAGE = "Password must have digit";
+const CHECK_PASSWORD_HAS_UPPERCASE_LETTER_ERROR_MESSAGE =
+  "Password must have upper case letter";
+const CHECK_PASSWORD_HAS_LOWERCASE_LETTER_ERROR_MESSAGE =
+  "Password must have lower case letter";
+const CHECK_PASSWORD_HAS_SPECIAL_LETTER_ERROR_MESSAGE =
+  "Password must have special letter (!@#$%)";
 
-  !checkLength(signinInfo.password) &&
-    errorBuilder(PASSWORD_ERROR, "checkLength");
+const showErrors = (signupInfo) => {
+  !checkGmail(signupInfo.gmail) &&
+    errorBuilder(GMAIL_TYPE_ERROR, CHECK_GMAIL_ERROR_MESSAGE);
 
-  !checkHasDigit(signinInfo.password) &&
-    errorBuilder(PASSWORD_ERROR, "checkHasDigit");
+  !checkLength(signupInfo.password) &&
+    errorBuilder(PASSWORD_TYPE_ERROR, CHECK_PASSWORD_LENGTH_ERROR_MESSAGE);
 
-  !checkHasUpperCaseLetter(signinInfo.password) &&
-    errorBuilder(PASSWORD_ERROR, "checkHasUpperCaseLetter");
+  !checkHasDigit(signupInfo.password) &&
+    errorBuilder(PASSWORD_TYPE_ERROR, CHECK_PASSWORD_HAS_DIGITS_ERROR_MESSAGE);
 
-  !checkHasLowerCaseLetter(signinInfo.password) &&
-    errorBuilder(PASSWORD_ERROR, "checkHasLowerCaseLetter");
+  !checkHasUpperCaseLetter(signupInfo.password) &&
+    errorBuilder(
+      PASSWORD_TYPE_ERROR,
+      CHECK_PASSWORD_HAS_UPPERCASE_LETTER_ERROR_MESSAGE
+    );
 
-  !checkHasSpecialLetter(signinInfo.password) &&
-    errorBuilder(PASSWORD_ERROR, "checkHasSpecialLetter");
+  !checkHasLowerCaseLetter(signupInfo.password) &&
+    errorBuilder(
+      PASSWORD_TYPE_ERROR,
+      CHECK_PASSWORD_HAS_LOWERCASE_LETTER_ERROR_MESSAGE
+    );
+
+  !checkHasSpecialLetter(signupInfo.password) &&
+    errorBuilder(
+      PASSWORD_TYPE_ERROR,
+      CHECK_PASSWORD_HAS_SPECIAL_LETTER_ERROR_MESSAGE
+    );
 };
 
 const clearErrorHints = () => {
@@ -119,28 +140,32 @@ const validateGmail = (emailAddress) => {
 
 const validatePassword = (password) => {
   return (
-    checkLength(password) &&
-    checkHasDigit(password) &&
-    checkHasUpperCaseLetter(password) &&
+    checkHasSpecialLetter(password) &&
     checkHasLowerCaseLetter(password) &&
-    checkHasSpecialLetter(password)
+    checkHasUpperCaseLetter(password) &&
+    checkHasDigit(password) &&
+    checkLength(password)
   );
 };
 
 //=========================================
 //=== Handle Form Elements KEYUP Event ====
 //=========================================
+
+const RED_COLOR = "#d32f2f";
+const GREEN_COLOR = "#388e3c";
+
 emailInput.addEventListener("keyup", () => {
   emailInput.style.borderColor = validateGmail(emailInput.value)
-    ? "green"
-    : "red";
+    ? GREEN_COLOR
+    : RED_COLOR;
   clearErrorHints();
 });
 
 passwordInput.addEventListener("keyup", () => {
   passwordInput.style.borderColor = validatePassword(passwordInput.value)
-    ? "green"
-    : "red";
+    ? GREEN_COLOR
+    : RED_COLOR;
   clearErrorHints();
 });
 
@@ -152,17 +177,17 @@ form.addEventListener("submit", (event) => {
 
   clearErrorHints();
 
-  let signinInfo = {
+  let signupInfo = {
     gmail: emailInput.value,
     password: passwordInput.value,
   };
 
   if (
-    validateGmail(signinInfo.gmail) &&
-    validatePassword(signinInfo.password)
+    validateGmail(signupInfo.gmail) &&
+    validatePassword(signupInfo.password)
   ) {
-    console.log(signinInfo); //Final Step => Values are valid
+    console.log(signupInfo); //Final Step => Values are valid
   } else {
-    showErrors(signinInfo);
+    showErrors(signupInfo);
   }
 });

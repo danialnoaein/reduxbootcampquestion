@@ -134,12 +134,14 @@ emailInput.addEventListener("keyup", () => {
   emailInput.style.borderColor = validateGmail(emailInput.value)
     ? "green"
     : "red";
+  clearErrorHints();
 });
 
 passwordInput.addEventListener("keyup", () => {
   passwordInput.style.borderColor = validatePassword(passwordInput.value)
     ? "green"
     : "red";
+  clearErrorHints();
 });
 
 //===========================
